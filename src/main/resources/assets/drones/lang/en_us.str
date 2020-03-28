@@ -1,0 +1,4 @@
+item.drones.drone: Drone
+item.drones.remote_control: Remote Control
+
+itemGroup.drones.all: Drones

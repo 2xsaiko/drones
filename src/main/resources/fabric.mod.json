@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "drones",
+  "version": "${version}",
+  "name": "Drones",
+  "description": "",
+  "icon": "assets/drones/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["drones.Main"],
+    "client": ["drones.client.Main"]
+  },
+  "mixins": [
+    "drones.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.15.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
