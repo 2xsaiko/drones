@@ -7,6 +7,7 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Direction;
@@ -16,6 +17,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Optional;
 
+import drones.Main;
 import drones.entity.DroneEntity;
 import drones.util.DroneSettings;
 
@@ -45,7 +47,7 @@ public class DroneItem extends Item {
         super.appendTooltip(stack, world, tooltip, context);
         getDroneSettings(stack).ifPresent(ds -> {
             if (context.isAdvanced()) {
-                if (ds.linkId != null) tooltip.add(new LiteralText(ds.linkId.toString()).formatted(Formatting.GRAY));
+                if (ds.linkId != null) tooltip.add(new TranslatableText(String.format("tooltip.%s.rc_target", Main.MODID), new LiteralText(ds.linkId.toString().substring(0, 7))).formatted(Formatting.GRAY));
             }
         });
     }

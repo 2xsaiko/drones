@@ -1,61 +1,98 @@
 package drones.client.render.entity.model;
 
+import net.minecraft.client.model.Model;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.CompositeEntityModel;
+import net.minecraft.util.math.EulerAngle;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import drones.entity.DroneEntity;
 
 public class DroneEntityModel extends CompositeEntityModel<DroneEntity> {
-    private final ModelPart body;
-    private final ModelPart rotorSocket1;
-    private final ModelPart rotorSocket2;
-    private final ModelPart rotorSocket3;
-    private final ModelPart rotorSocket4;
-    private final ModelPart rotor1;
-    private final ModelPart rotor2;
-    private final ModelPart rotor3;
-    private final ModelPart rotor4;
+    private final LinkedModelPart body;
+    private final LinkedModelPart rotorSocket1;
+    private final LinkedModelPart rotorSocket2;
+    private final LinkedModelPart rotorSocket3;
+    private final LinkedModelPart rotorSocket4;
+    private final LinkedModelPart rotor1;
+    private final LinkedModelPart rotor2;
+    private final LinkedModelPart rotor3;
+    private final LinkedModelPart rotor4;
 
     public DroneEntityModel() {
-        body = new ModelPart(this, 0, 0);
-        body.addCuboid(0f, 0f, 0f, 6f, 3f, 10f);
-        body.setPivot(0f, 1.5f, 0f);
-        rotorSocket1 = new ModelPart(this, 0, 0);
-        rotorSocket1.addCuboid(5f, 3.5f, 4f, 2f, 1f, 2f);
-        rotorSocket1.setPivot(5f, 3.5f, 4f);
-        rotorSocket2 = new ModelPart(this, 0, 0);
-        rotorSocket2.addCuboid(5f, 3.5f, 12f, 2f, 1f, 2f);
-        rotorSocket2.setPivot(5f, 3.5f, 12f);
-        rotorSocket3 = new ModelPart(this, 0, 0);
-        rotorSocket3.addCuboid(11f, 3.5f, 12f, 2f, 1f, 2f);
-        rotorSocket3.setPivot(11f, 3.5f, 12f);
-        rotorSocket4 = new ModelPart(this, 0, 0);
-        rotorSocket4.addCuboid(11f, 3.5f, 4f, 2f, 1f, 2f);
-        rotorSocket4.setPivot(11f, 3.5f, 4f);
-        rotor1 = new ModelPart(this, 0, 0);
-        rotor1.addCuboid(5f, 4.5f, 4f, 8f, 1f, 2f);
-        rotor1.setPivot(5f, 4.5f, 4f);
-        rotor2 = new ModelPart(this, 0, 0);
-        rotor2.addCuboid(5f, 4.5f, 12f, 2f, 1f, 8f);
-        rotor2.setPivot(5f, 4.5f, 12f);
-        rotor3 = new ModelPart(this, 0, 0);
-        rotor3.addCuboid(11f, 4.5f, 12f, 8f, 1f, 2f);
-        rotor3.setPivot(11f, 4.5f, 12f);
-        rotor4 = new ModelPart(this, 0, 0);
-        rotor4.addCuboid(11f, 4.5f, 4f, 2f, 1f, 8f);
-        rotor4.setPivot(11f, 4.5f, 4f);
+        body = createPart(this, 0, 0,
+            0f, 1.5f, 0f,
+            6f, 3f, 10f,
+            0f, 1.5f, 0f);
+        rotorSocket1 = createPart(this, body, 0, 0,
+            -3f, 3.5f, -4f,
+            2f, 1f, 2f,
+            -3f, 3.5f, -4f);
+        rotorSocket2 = createPart(this, body, 0, 0,
+            -3f, 3.5f, 4f,
+            2f, 1f, 2f,
+            -3f, 3.5f, 4f);
+        rotorSocket3 = createPart(this, body, 0, 0,
+            3f, 3.5f, 4f,
+            2f, 1f, 2f,
+            3f, 3.5f, 4f);
+        rotorSocket4 = createPart(this, body, 0, 0,
+            3f, 3.5f, -4f,
+            2f, 1f, 2f,
+            3f, 3.5f, -4f);
+        rotor1 = createPart(this, rotorSocket1, 0, 13,
+            -3f, 4.5f, -4f,
+            8f, 1f, 2f,
+            -3f, 4.5f, -4f);
+        rotor2 = createPart(this, rotorSocket2, 0, 16,
+            -3f, 4.5f, 4f,
+            8f, 1f, 2f,
+            -3f, 4.5f, 4f);
+        rotor3 = createPart(this, rotorSocket3, 0, 13,
+            3f, 4.5f, 4f,
+            8f, 1f, 2f,
+            3f, 4.5f, 4f);
+        rotor4 = createPart(this, rotorSocket4, 0, 16,
+            3f, 4.5f, -4f,
+            8f, 1f, 2f,
+            3f, 4.5f, -4f);
+    }
+
+    private static LinkedModelPart createPart(Model model, int u, int v, float x, float y, float z, float sx, float sy, float sz, float px, float py, float pz) {
+        LinkedModelPart part = new LinkedModelPart(model, u, v);
+        part.addCuboid(x - sx / 2 - px, y - sy / 2 - py, z - sz / 2 - pz, sx, sy, sz);
+        part.setPivot(px, py, pz);
+        return part;
+    }
+
+    private static LinkedModelPart createPart(Model model, LinkedModelPart parent, int u, int v, float x, float y, float z, float sx, float sy, float sz, float px, float py, float pz) {
+        LinkedModelPart part = createPart(model, u, v,
+            x - parent.getTotalPivotX(), y - parent.getTotalPivotY(), z - parent.getTotalPivotZ(),
+            sx, sy, sz,
+            px - parent.getTotalPivotX(), py - parent.getTotalPivotY(), pz - parent.getTotalPivotZ());
+        parent.addChild(part);
+        part.parent = parent;
+        return part;
     }
 
     @Override
     public Iterable<ModelPart> getParts() {
-        return Arrays.asList(body, rotorSocket1, rotorSocket2, rotorSocket3, rotorSocket4, rotor1, rotor2, rotor3, rotor4);
+        return Collections.singletonList(body);
     }
 
     @Override
     public void setAngles(DroneEntity entity, float limbAngle, float limbDistance, float customAngle, float headYaw, float headPitch) {
-
+        EulerAngle ang = new EulerAngle(0, 0, 0);//MathUtil.toEulerAngles(entity.getRotation());
+        body.yaw = ang.getYaw();
+        body.pitch = ang.getPitch();
+        body.roll = ang.getRoll();
+        float rotation = System.nanoTime() / 100f % 360;
+        float toRadians = (float) (Math.PI / 180);
+        rotor1.yaw = rotation * toRadians;
+        rotor2.yaw = (-rotation + 90) * toRadians;
+        rotor3.yaw = (rotation + 180) * toRadians;
+        rotor4.yaw = (-rotation + 270) * toRadians;
     }
 
 }

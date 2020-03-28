@@ -2,3 +2,6 @@ item.drones.drone: Drone
 item.drones.remote_control: Remote Control
 
 itemGroup.drones.all: Drones
+
+status.drones.drone_linked: Linked!
+tooltip.drones.rc_target: Linked to: {}

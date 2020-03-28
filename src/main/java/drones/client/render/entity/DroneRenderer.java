@@ -28,7 +28,10 @@ public class DroneRenderer extends EntityRenderer<DroneEntity> {
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
         this.model.setAngles(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(this.model.getLayer(this.getTexture(entity)));
+        matrices.push();
+        matrices.multiply(entity.getRotation());
         this.model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
+        matrices.pop();
     }
 
     @Override

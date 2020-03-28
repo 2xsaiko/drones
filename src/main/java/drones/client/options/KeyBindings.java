@@ -20,6 +20,12 @@ public class KeyBindings {
     public static FabricKeyBinding DRONE_TURN_LEFT;
     public static FabricKeyBinding DRONE_TURN_RIGHT;
 
+    private static FabricKeyBinding create(String name, int code) {
+        FabricKeyBinding kb = Builder.create(new Identifier(Main.MODID, name), Type.KEYSYM, code, String.format("%s.drone_controls", Main.MODID)).build();
+        KeyBindingRegistry.INSTANCE.register(kb);
+        return kb;
+    }
+
     public static void initialize() {
         KeyBindingRegistry.INSTANCE.addCategory(String.format("%s.drone_controls", Main.MODID));
         DRONE_TILT_FORWARD = create("drone_tilt_forward", GLFW.GLFW_KEY_KP_8);
@@ -30,12 +36,6 @@ public class KeyBindings {
         DRONE_DECEL = create("drone_decel", GLFW.GLFW_KEY_KP_ENTER);
         DRONE_TURN_LEFT = create("drone_turn_left", GLFW.GLFW_KEY_KP_1);
         DRONE_TURN_RIGHT = create("drone_turn_right", GLFW.GLFW_KEY_KP_3);
-    }
-
-    private static FabricKeyBinding create(String name, int code) {
-        FabricKeyBinding kb = Builder.create(new Identifier(Main.MODID, name), Type.KEYSYM, code, String.format("%s.drone_controls", Main.MODID)).build();
-        KeyBindingRegistry.INSTANCE.register(kb);
-        return kb;
     }
 
 }
