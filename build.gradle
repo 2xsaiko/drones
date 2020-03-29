@@ -26,11 +26,7 @@ dependencies {
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
 
-    modImplementation 'net.dblsaiko:libaddict:0.1.3-4'
-
     modRuntime 'net.dblsaiko:winwonders:0.1.2-4'
-
-    include 'net.dblsaiko:libaddict:0.1.3-4'
 }
 
 processResources {
