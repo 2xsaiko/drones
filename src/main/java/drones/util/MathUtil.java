@@ -1,5 +1,7 @@
 package drones.util;
 
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.math.EulerAngle;
 import net.minecraft.util.math.Quaternion;
@@ -49,14 +51,14 @@ public final class MathUtil {
             .add(u.crossProduct(self).multiply(2.0f * s));
     }
 
-//    public static Quaternion getRotationTowards(Vec3d from, Vec3d to) {
-//        Quaternion q = Quaternion.IDENTITY.copy();
-//        Vec3d cross = from.crossProduct(to);
-//        float w = (float) (MathHelper.sqrt(from.lengthSquared() * to.lengthSquared()) + from.dotProduct(to));
-//        q.set(w, (float) cross.x, (float) cross.y, (float) cross.z);
-//        q.normalize();
-//        return q;
-//    }
+    public static Quaternion getRotationTowards(Vec3d from, Vec3d to) {
+        Quaternion q = Quaternion.IDENTITY.copy();
+        Vec3d cross = from.crossProduct(to);
+        float w = (float) (Math.sqrt(from.lengthSquared() * to.lengthSquared()) + from.dotProduct(to));
+        q.set((float) cross.x, (float) cross.y, (float) cross.z, w);
+        q.normalize();
+        return q;
+    }
 //
 //    public static float dot(Quaternion v0, Quaternion v1) {
 //        return v0.getA() * v1.getA() + v0.getA() * v1.getA() + v0.getB() * v1.getB() + v0.getC() * v1.getC() + v0.getD() * v1.getD();
@@ -134,11 +136,49 @@ public final class MathUtil {
 //        set(self, q1);
 //    }
 
-    public static void rotateTowards(Quaternion self, Vec3d orientation, float speed) {
+    public static void rotateTowards(Quaternion self, Vec3d orientation, float speed, Matrix4f mat, VertexConsumer debugConsumer) {
+        self.normalize();
         Vec3d vec2 = rotate(orientation, self);
         Vec3d cross = orientation.crossProduct(vec2);
         Vec3d axis = cross.normalize();
-        self.hamiltonProduct(new Quaternion(new Vector3f(axis), speed * (float) cross.length(), false));
+        float f = (float) Math.signum(cross.dotProduct(axis));
+        float f1 = f * (float) cross.length();
+        if (debugConsumer != null) {
+            debugConsumer.vertex(mat, 0.0f, 0.0f, 0.0f).color(1f, 0f, 0f, 1f).next();
+            debugConsumer.vertex(mat, (float) orientation.x, (float) orientation.y, (float) orientation.z).color(1f, 0f, 0f, 1f).next();
+
+            debugConsumer.vertex(mat, 0.0f, 0.0f, 0.0f).color(0f, 0f, 1f, 1f).next();
+            debugConsumer.vertex(mat, (float) vec2.x, (float) vec2.y, (float) vec2.z).color(0f, 0f, 1f, 1f).next();
+
+            debugConsumer.vertex(mat, 0.0f, 0.0f, 0.0f).color(0f, 1f, 0f, 1f).next();
+            debugConsumer.vertex(mat, (float) cross.x, (float) cross.y, (float) cross.z).color(0f, 1f, 0f, 1f).next();
+        }
+        self.hamiltonProduct(new Quaternion(new Vector3f(axis), speed * f1, false));
+    }
+
+    public static Vec3d interp(Vec3d from, Vec3d to, double delta) {
+        return from.multiply(1 - delta).add(to.multiply(delta));
+    }
+
+    public static void rotateTowards1(Quaternion self, Vec3d orientation, float speed, Matrix4f mat, VertexConsumer debugConsumer) {
+        Vec3d vec2 = rotate(orientation, self).normalize();
+        Vec3d cross = orientation.crossProduct(vec2);
+        double partial = cross.length() * speed;
+        Vec3d target = interp(vec2, orientation, partial).normalize();
+        if (debugConsumer != null) {
+            debugConsumer.vertex(mat, 0.0f, 0.0f, 0.0f).color(1f, 0f, 0f, 1f).next();
+            debugConsumer.vertex(mat, (float) orientation.x, (float) orientation.y, (float) orientation.z).color(1f, 0f, 0f, 1f).next();
+
+            debugConsumer.vertex(mat, 0.0f, 0.0f, 0.0f).color(0f, 0f, 1f, 1f).next();
+            debugConsumer.vertex(mat, (float) vec2.x, (float) vec2.y, (float) vec2.z).color(0f, 0f, 1f, 1f).next();
+
+            debugConsumer.vertex(mat, 0.0f, 0.0f, 0.0f).color(0f, 1f, 0f, 1f).next();
+            debugConsumer.vertex(mat, (float) cross.x, (float) cross.y, (float) cross.z).color(0f, 1f, 0f, 1f).next();
+
+            debugConsumer.vertex(mat, 0.0f, 0.0f, 0.0f).color(1f, 0f, 1f, 1f).next();
+            debugConsumer.vertex(mat, (float) target.x, (float) target.y, (float) target.z).color(1f, 0f, 1f, 1f).next();
+        }
+        self.hamiltonProduct(getRotationTowards(vec2, target));
     }
 
 }
