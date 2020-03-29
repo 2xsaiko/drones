@@ -59,7 +59,8 @@ public final class MathUtil {
         q.normalize();
         return q;
     }
-//
+
+    //
 //    public static float dot(Quaternion v0, Quaternion v1) {
 //        return v0.getA() * v1.getA() + v0.getA() * v1.getA() + v0.getB() * v1.getB() + v0.getC() * v1.getC() + v0.getD() * v1.getD();
 //    }
@@ -76,9 +77,9 @@ public final class MathUtil {
 //        self.set(self.getA() - other.getA(), self.getB() - other.getB(), self.getC() - other.getC(), self.getD() - other.getD());
 //    }
 //
-//    public static void set(Quaternion self, Quaternion other) {
-//        self.set(other.getA(), other.getB(), other.getC(), other.getD());
-//    }
+    public static void set(Quaternion self, Quaternion other) {
+        self.set(other.getB(), other.getC(), other.getD(), other.getA());
+    }
 //
 //    public static Quaternion slerp(Quaternion v0, Quaternion v1, float t) {
 //        // Only unit quaternions are valid rotations.
@@ -139,10 +140,9 @@ public final class MathUtil {
     public static void rotateTowards(Quaternion self, Vec3d orientation, float speed, Matrix4f mat, VertexConsumer debugConsumer) {
         self.normalize();
         Vec3d vec2 = rotate(orientation, self);
-        Vec3d cross = orientation.crossProduct(vec2);
+        Vec3d cross = orientation.crossProduct(vec2).negate();
         Vec3d axis = cross.normalize();
-        float f = (float) Math.signum(cross.dotProduct(axis));
-        float f1 = f * (float) cross.length();
+        float f1 = (float) cross.length();
         if (debugConsumer != null) {
             debugConsumer.vertex(mat, 0.0f, 0.0f, 0.0f).color(1f, 0f, 0f, 1f).next();
             debugConsumer.vertex(mat, (float) orientation.x, (float) orientation.y, (float) orientation.z).color(1f, 0f, 0f, 1f).next();
@@ -153,7 +153,9 @@ public final class MathUtil {
             debugConsumer.vertex(mat, 0.0f, 0.0f, 0.0f).color(0f, 1f, 0f, 1f).next();
             debugConsumer.vertex(mat, (float) cross.x, (float) cross.y, (float) cross.z).color(0f, 1f, 0f, 1f).next();
         }
-        self.hamiltonProduct(new Quaternion(new Vector3f(axis), speed * f1, false));
+        Quaternion other = new Quaternion(new Vector3f(axis), speed * f1, false);
+        other.hamiltonProduct(self);
+        set(self, other);
     }
 
     public static Vec3d interp(Vec3d from, Vec3d to, double delta) {
@@ -178,7 +180,9 @@ public final class MathUtil {
             debugConsumer.vertex(mat, 0.0f, 0.0f, 0.0f).color(1f, 0f, 1f, 1f).next();
             debugConsumer.vertex(mat, (float) target.x, (float) target.y, (float) target.z).color(1f, 0f, 1f, 1f).next();
         }
-        self.hamiltonProduct(getRotationTowards(vec2, target));
+        Quaternion other = getRotationTowards(vec2, target);
+        other.hamiltonProduct(self);
+        set(self, other);
     }
 
 }

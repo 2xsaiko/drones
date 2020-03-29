@@ -76,7 +76,7 @@ public class DroneEntity extends Entity {
             rotation.normalize();
         }
 
-        MathUtil.rotateTowards1(rotation, UP, 0.2f, null, null);
+        MathUtil.rotateTowards(rotation, UP, 0.2f, null, null);
         setRotation(rotation);
 
         Vec3d up = MathUtil.rotate(UP, rotation);
