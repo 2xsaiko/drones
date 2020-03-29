@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.player.PlayerEntity;
@@ -65,7 +66,7 @@ public class DroneEntity extends Entity {
 
         Quaternion rotation = getRotation().copy();
         float x = inputs.getZTilt();
-        float y = inputs.getYTurn();
+        float y = -inputs.getYTurn();
         float z = inputs.getXTilt();
         float l = MathHelper.sqrt(x * x + y * y + z * z);
         if (l != 0) {
@@ -81,7 +82,7 @@ public class DroneEntity extends Entity {
 
         Vec3d up = MathUtil.rotate(UP, rotation);
         Vec3d g = new Vec3d(0, -0.1, 0);
-        //move(MovementType.SELF, g.add(MathUtil.rotate(g.negate(), rotation)).add(up.multiply(0.2 * inputs.getSpeed())));
+        move(MovementType.SELF, g.add(MathUtil.rotate(g.negate(), rotation)).add(up.multiply(0.2 * inputs.getSpeed())));
     }
 
     @Override
