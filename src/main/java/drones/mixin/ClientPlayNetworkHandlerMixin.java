@@ -35,8 +35,8 @@ public class ClientPlayNetworkHandlerMixin {
         }
         if (entity != null) {
             int i = packet.getId();
-            entity.resetPosition(x, y, z);
             entity.setVelocity(Vec3d.ZERO);
+            entity.updatePosition(x, y, z);
             entity.updateTrackedPosition(x, y, z);
             entity.pitch = (float) (packet.getPitch() * 360) / 256.0F;
             entity.yaw = (float) (packet.getYaw() * 360) / 256.0F;
