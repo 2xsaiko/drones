@@ -4,7 +4,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MovementType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,6 +39,8 @@ public class DroneEntity extends Entity {
     private static final TrackedData<Quaternion> ROTATION = DataTracker.registerData(DroneEntity.class, TrackedDataHandlers.QUATERNION);
     private static final TrackedData<RcInputState> INPUTS = DataTracker.registerData(DroneEntity.class, TrackedDataHandlers.RC_INPUT_STATE);
 
+    private static final Vec3d UP = new Vec3d(0, 1, 0);
+
     private UUID linkId = null;
     private RcReceiver recv = null;
 
@@ -62,6 +63,7 @@ public class DroneEntity extends Entity {
             inputs = getInputs();
         }
 
+        Quaternion rotation = getRotation().copy();
         float x = inputs.getZTilt();
         float y = inputs.getYTurn();
         float z = inputs.getXTilt();
@@ -70,14 +72,16 @@ public class DroneEntity extends Entity {
             x /= l;
             y /= l;
             z /= l;
-            Quaternion rotation = getRotation().copy();
             rotation.hamiltonProduct(new Quaternion(new Vector3f(x, y, z), 0.2f, false));
             rotation.normalize();
-            setRotation(rotation);
         }
-        Quaternion rotation = getRotation();
-        Vec3d up = MathUtil.rotate(new Vec3d(0, 1, 0), rotation);
-        move(MovementType.SELF, up.multiply(0.2 * inputs.getSpeed()));
+
+        MathUtil.rotateTowards(rotation, UP, 0.2f);
+        setRotation(rotation);
+
+        Vec3d up = MathUtil.rotate(UP, rotation);
+        Vec3d g = new Vec3d(0, -0.1, 0);
+        //move(MovementType.SELF, g.add(MathUtil.rotate(g.negate(), rotation)).add(up.multiply(0.2 * inputs.getSpeed())));
     }
 
     @Override

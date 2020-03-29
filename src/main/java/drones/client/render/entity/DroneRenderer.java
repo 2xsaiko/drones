@@ -1,6 +1,7 @@
 package drones.client.render.entity;
 
 import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -31,6 +32,9 @@ public class DroneRenderer extends EntityRenderer<DroneEntity> {
         matrices.push();
         matrices.multiply(entity.getRotation());
         this.model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
+
+        VertexConsumer buffer = vertexConsumers.getBuffer(RenderLayer.getLines());
+
         matrices.pop();
     }
 
