@@ -6,9 +6,12 @@
   "mixins": [
   ],
   "client": [
+    "ClientPlayerEntityMixin",
     "ClientPlayNetworkHandlerMixin",
+    "GameRendererMixin",
     "ItemRendererMixin",
-    "MinecraftClientMixin"
+    "MinecraftClientMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

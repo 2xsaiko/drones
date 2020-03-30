@@ -17,6 +17,7 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.EulerAngle;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
@@ -65,7 +66,7 @@ public class DroneEntity extends Entity {
         }
 
         Quaternion rotation = getRotation().copy();
-        float x = inputs.getZTilt();
+        float x = -inputs.getZTilt();
         float y = -inputs.getYTurn();
         float z = inputs.getXTilt();
         float l = MathHelper.sqrt(x * x + y * y + z * z);
@@ -79,6 +80,10 @@ public class DroneEntity extends Entity {
 
         MathUtil.rotateTowards(rotation, UP, 0.2f, null, null);
         setRotation(rotation);
+
+        EulerAngle eulerAngle = MathUtil.toEulerAngles(rotation);
+        yaw = eulerAngle.getYaw() * MathUtil.toDegreesf;
+        pitch = eulerAngle.getPitch() * MathUtil.toDegreesf;
 
         Vec3d up = MathUtil.rotate(UP, rotation);
         Vec3d g = new Vec3d(0, -0.1, 0);

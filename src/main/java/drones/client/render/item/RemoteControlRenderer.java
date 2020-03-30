@@ -24,10 +24,10 @@ public class RemoteControlRenderer {
         Entry tos = matrices.peek();
         Matrix3f normal = tos.getNormal();
         Matrix4f tr = tos.getModel();
-        buffer.vertex(tr, 4 / 16f, 4 / 16f, 3.75f / 16f).color(1f, 1f, 1f, 1f).texture(0f, 1f).overlay(overlay).light(light).normal(normal, 0f, 0f, 1f).next();
-        buffer.vertex(tr, 12 / 16f, 4 / 16f, 3.75f / 16f).color(1f, 1f, 1f, 1f).texture(1f, 1f).overlay(overlay).light(light).normal(normal, 0f, 0f, 1f).next();
-        buffer.vertex(tr, 12 / 16f, 10 / 16f, 3.75f / 16f).color(1f, 1f, 1f, 1f).texture(1f, 0f).overlay(overlay).light(light).normal(normal, 0f, 0f, 1f).next();
-        buffer.vertex(tr, 4 / 16f, 10 / 16f, 3.75f / 16f).color(1f, 1f, 1f, 1f).texture(0f, 0f).overlay(overlay).light(light).normal(normal, 0f, 0f, 1f).next();
+        buffer.vertex(tr, 4 / 16f, 4 / 16f, 3.75f / 16f).color(1f, 1f, 1f, 1f).texture(0f, 0f).overlay(overlay).light(0xF000F0).normal(normal, 0f, 0f, 1f).next();
+        buffer.vertex(tr, 12 / 16f, 4 / 16f, 3.75f / 16f).color(1f, 1f, 1f, 1f).texture(1f, 0f).overlay(overlay).light(0xF000F0).normal(normal, 0f, 0f, 1f).next();
+        buffer.vertex(tr, 12 / 16f, 10 / 16f, 3.75f / 16f).color(1f, 1f, 1f, 1f).texture(1f, 1f).overlay(overlay).light(0xF000F0).normal(normal, 0f, 0f, 1f).next();
+        buffer.vertex(tr, 4 / 16f, 10 / 16f, 3.75f / 16f).color(1f, 1f, 1f, 1f).texture(0f, 1f).overlay(overlay).light(0xF000F0).normal(normal, 0f, 0f, 1f).next();
     }
 
 }
