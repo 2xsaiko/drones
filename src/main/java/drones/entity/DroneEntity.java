@@ -68,7 +68,7 @@ public class DroneEntity extends Entity {
         Quaternion rotation = getRotation().copy();
         float x = -inputs.getZTilt();
         float y = -inputs.getYTurn();
-        float z = inputs.getXTilt();
+        float z = -inputs.getXTilt();
         float l = MathHelper.sqrt(x * x + y * y + z * z);
         if (l != 0) {
             x /= l;
