@@ -93,4 +93,10 @@ public final class MathUtil {
         self.set(-self.getB() / l, -self.getC() / l, -self.getD() / l, self.getA() / l);
     }
 
+    public static Quaternion invertCopy(Quaternion q) {
+        Quaternion q1 = q.copy();
+        invert(q1);
+        return q1;
+    }
+
 }

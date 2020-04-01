@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -23,6 +24,11 @@ import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.lang.ref.WeakReference;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import drones.Main;
@@ -35,21 +41,25 @@ import drones.util.MathUtil;
 import drones.util.RcHandler;
 import drones.util.RcInputState;
 import drones.util.RcReceiver;
+import drones.util.WeakIter;
 
 public class DroneEntity extends Entity {
 
     private static final TrackedData<Quaternion> ROTATION = DataTracker.registerData(DroneEntity.class, TrackedDataHandlers.QUATERNION);
     private static final TrackedData<RcInputState> INPUTS = DataTracker.registerData(DroneEntity.class, TrackedDataHandlers.RC_INPUT_STATE);
+    private static final TrackedData<Optional<UUID>> LINK_ID = DataTracker.registerData(DroneEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
 
     private static final Vec3d UP = new Vec3d(0, 1, 0);
 
-    private UUID linkId = null;
+    private static final Set<WeakReference<DroneEntity>> INSTANCES = new HashSet<>();
+
     private RcReceiver recv = null;
 
     private int interactionCooldown; // fuck you
 
     public DroneEntity(EntityType<? extends DroneEntity> type, World world) {
         super(type, world);
+        if (world.isClient()) INSTANCES.add(new WeakReference<>(this));
     }
 
     @Override
@@ -127,7 +137,11 @@ public class DroneEntity extends Entity {
 
     @Override
     protected void writeCustomDataToTag(CompoundTag tag) {
-        tag.put("DroneSettings", DroneSettings.of(linkId).toTag());
+        tag.put("DroneSettings", DroneSettings.of(getLinkId()).toTag());
+    }
+
+    public UUID getLinkId() {
+        return getDataTracker().get(LINK_ID).orElse(null);
     }
 
     private void setSettings(DroneSettings ds) {
@@ -135,21 +149,21 @@ public class DroneEntity extends Entity {
     }
 
     private void setLinkId(UUID linkId) {
-        this.linkId = linkId;
+        getDataTracker().set(LINK_ID, Optional.ofNullable(linkId));
         this.recv = null;
     }
 
     private RcReceiver getReceiver() {
         if (world.isClient()) return null;
-        if (linkId == null) return null;
+        if (getLinkId() == null) return null;
         if (recv == null) {
-            recv = RcHandler.getInstance((ServerWorld) world).receiver(linkId, this);
+            recv = RcHandler.getInstance((ServerWorld) world).receiver(getLinkId(), this);
         }
         return recv;
     }
 
     public DroneSettings getSettings() {
-        return DroneSettings.of(linkId);
+        return DroneSettings.of(getLinkId());
     }
 
     @Override
@@ -186,6 +200,7 @@ public class DroneEntity extends Entity {
     protected void initDataTracker() {
         getDataTracker().startTracking(ROTATION, Quaternion.IDENTITY.copy());
         getDataTracker().startTracking(INPUTS, RcInputState.ofDefault());
+        getDataTracker().startTracking(LINK_ID, Optional.empty());
     }
 
     @Override
@@ -197,6 +212,10 @@ public class DroneEntity extends Entity {
         DroneEntity de = new DroneEntity(EntityTypes.DRONE, world);
         de.setSettings(settings);
         return de;
+    }
+
+    public static Iterator<DroneEntity> getInstances() {
+        return WeakIter.wrap(INSTANCES.iterator());
     }
 
 }

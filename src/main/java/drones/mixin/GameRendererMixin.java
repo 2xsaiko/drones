@@ -29,6 +29,7 @@ public class GameRendererMixin implements GameRendererExt {
 
     @Shadow @Final private MinecraftClient client;
 
+    @Shadow private float viewDistance;
     private DroneEntity dronePov;
 
     private float lastTickDelta;
@@ -65,7 +66,7 @@ public class GameRendererMixin implements GameRendererExt {
         MatrixStack matrixStack = new MatrixStack();
         matrixStack.peek().getModel().loadIdentity();
 
-        matrixStack.peek().getModel().multiply(Matrix4f.viewboxMatrix(90.0f, 4 / 3f, 0.05f, 32f));
+        matrixStack.peek().getModel().multiply(Matrix4f.viewboxMatrix(90.0f, 4 / 3f, 0.05f, viewDistance * 4.0f));
         cir.setReturnValue(matrixStack.peek().getModel());
     }
 
@@ -107,6 +108,7 @@ public class GameRendererMixin implements GameRendererExt {
     private void applyRotation(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
         if (getDronePov() == null) return;
 
+        matrix.translate(0.0, -0.2, 0.0);
         Quaternion rotation = getDronePov().getRotation().copy();
         MathUtil.invert(rotation);
         matrix.multiply(rotation);

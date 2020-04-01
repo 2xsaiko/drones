@@ -17,9 +17,8 @@ public class EntityTypes {
     public static void initialize() {
         DRONE = Registry.register(Registry.ENTITY_TYPE, new Identifier(Main.MODID, "drone"),
             FabricEntityTypeBuilder.create(EntityCategory.MISC, DroneEntity::new)
-                .size(EntityDimensions.fixed(1f, 1f))
-                .trackable(64, 4)
-                .build());
+                .size(EntityDimensions.fixed(0.75f, 0.3f))
+                .trackable(64, 4).build());
     }
 
 }

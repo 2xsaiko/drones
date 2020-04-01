@@ -4,15 +4,18 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 
-import java.util.stream.StreamSupport;
+import java.util.Iterator;
+import java.util.UUID;
 
 import drones.client.ext.GameRendererExt;
 import drones.client.ext.MinecraftClientExt;
 import drones.client.texture.DronePovTexture;
 import drones.entity.DroneEntity;
+import drones.init.Items;
+import drones.item.RemoteControlItem;
 
-import static com.mojang.blaze3d.systems.RenderSystem.disableCull;
 import static com.mojang.blaze3d.systems.RenderSystem.loadIdentity;
 import static com.mojang.blaze3d.systems.RenderSystem.popMatrix;
 import static com.mojang.blaze3d.systems.RenderSystem.pushMatrix;
@@ -34,7 +37,16 @@ public class DronePovRenderer {
     }
 
     public DroneEntity getPovEntity() {
-        return (DroneEntity) StreamSupport.stream(MinecraftClient.getInstance().world.getEntities().spliterator(), true).filter($ -> $ instanceof DroneEntity).findAny().orElse(null);
+        MinecraftClient mc = MinecraftClient.getInstance();
+        ItemStack heldItem = mc.player.getMainHandStack();
+        if (heldItem.getItem() != Items.REMOTE_CONTROL) return null;
+        UUID linkId = RemoteControlItem.getLinkId(heldItem);
+        if (linkId == null) return null;
+        for (Iterator<DroneEntity> iter = DroneEntity.getInstances(); iter.hasNext(); ) {
+            DroneEntity next = iter.next();
+            if (next.world == mc.player.world && linkId.equals(next.getLinkId())) return next;
+        }
+        return null;
     }
 
     public void render(float tickDelta, long limitTime) {
@@ -60,10 +72,7 @@ public class DronePovRenderer {
         pushMatrix();
         loadIdentity();
 
-        // setupCamera(lc)
-
         mc.cameraEntity = povEntity;
-        disableCull();
 
         try {
             GameRendererExt.from(mc.gameRenderer).setDronePov(povEntity);
