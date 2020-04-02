@@ -5,6 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import drones.entity.data.TrackedDataHandlers;
 import drones.init.EntityTypes;
 import drones.init.Items;
+import drones.network.RcActionPacket;
 import drones.network.RcInputPacket;
 
 public class Main implements ModInitializer {
@@ -18,6 +19,7 @@ public class Main implements ModInitializer {
         TrackedDataHandlers.register();
 
         RcInputPacket.register();
+        RcActionPacket.register();
     }
 
 }

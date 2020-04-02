@@ -5,7 +5,9 @@ import net.minecraft.item.ItemStack;
 
 import drones.client.options.KeyBindings;
 import drones.init.Items;
+import drones.network.RcActionPacket;
 import drones.network.RcInputPacket;
+import drones.util.RcAction;
 import drones.util.RcInputState;
 
 public class UpdateStateHandler {
@@ -22,6 +24,10 @@ public class UpdateStateHandler {
         if (!state.equals(lastTransmitted)) {
             RcInputPacket.of(state).send();
             lastTransmitted = state;
+        }
+
+        while (KeyBindings.DRONE_PICK_UP.wasPressed()) {
+            RcActionPacket.of(RcAction.PICK_UP).send();
         }
     }
 

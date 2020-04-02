@@ -19,6 +19,7 @@ public class KeyBindings {
     public static FabricKeyBinding DRONE_DECEL;
     public static FabricKeyBinding DRONE_TURN_LEFT;
     public static FabricKeyBinding DRONE_TURN_RIGHT;
+    public static FabricKeyBinding DRONE_PICK_UP;
 
     private static FabricKeyBinding create(String name, int code) {
         FabricKeyBinding kb = Builder.create(new Identifier(Main.MODID, name), Type.KEYSYM, code, String.format("%s.drone_controls", Main.MODID)).build();
@@ -36,6 +37,7 @@ public class KeyBindings {
         DRONE_DECEL = create("drone_decel", GLFW.GLFW_KEY_KP_ENTER);
         DRONE_TURN_LEFT = create("drone_turn_left", GLFW.GLFW_KEY_KP_1);
         DRONE_TURN_RIGHT = create("drone_turn_right", GLFW.GLFW_KEY_KP_3);
+        DRONE_PICK_UP = create("drone_pick_up", GLFW.GLFW_KEY_KP_MULTIPLY);
     }
 
 }

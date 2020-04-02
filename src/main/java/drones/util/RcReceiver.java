@@ -4,4 +4,6 @@ public interface RcReceiver {
 
     RcInputState inputs();
 
+    RcAction nextAction();
+
 }

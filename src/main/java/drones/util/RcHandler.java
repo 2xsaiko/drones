@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -80,12 +82,19 @@ public class RcHandler {
             signals.put(source, state);
         }
 
+        public void postAction(RcAction action) {
+            for (WeakIter<RcReceiverImpl> iter = WeakIter.wrap(receivers.iterator()); iter.hasNext(); ) {
+                RcReceiverImpl next = iter.next();
+                next.pushAction(action);
+            }
+        }
     }
 
     private static final class RcReceiverImpl implements RcReceiver {
 
         public final RcChannel chan;
         public final Entity entity;
+        private final List<RcAction> pendingActions = new LinkedList<>();
 
         private RcReceiverImpl(RcChannel chan, Entity entity) {
             this.chan = chan;
@@ -95,6 +104,16 @@ public class RcHandler {
         @Override
         public RcInputState inputs() {
             return chan.signal(entity.getPos());
+        }
+
+        public void pushAction(RcAction action) {
+            pendingActions.add(action);
+        }
+
+        @Override
+        public RcAction nextAction() {
+            if (pendingActions.isEmpty()) return null;
+            return pendingActions.remove(0);
         }
 
     }
@@ -112,6 +131,11 @@ public class RcHandler {
         @Override
         public void send(RcInputState inputs) {
             chan.post(this, inputs);
+        }
+
+        @Override
+        public void send(RcAction action) {
+            chan.postAction(action);
         }
 
         public boolean isValid() {

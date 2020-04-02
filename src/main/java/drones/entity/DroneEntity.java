@@ -38,6 +38,7 @@ import drones.init.Items;
 import drones.item.RemoteControlItem;
 import drones.util.DroneSettings;
 import drones.util.MathUtil;
+import drones.util.RcAction;
 import drones.util.RcHandler;
 import drones.util.RcInputState;
 import drones.util.RcReceiver;
@@ -72,6 +73,15 @@ public class DroneEntity extends Entity {
             RcReceiver recv = getReceiver();
             inputs = recv == null ? RcInputState.ofDefault() : recv.inputs();
             setInputs(inputs);
+
+            RcAction next;
+            while ((next = recv.nextAction()) != null) {
+                switch (next) {
+                    case PICK_UP:
+                        pickUpEntity();
+                        break;
+                }
+            }
         } else {
             inputs = getInputs();
         }
@@ -115,6 +125,37 @@ public class DroneEntity extends Entity {
 
         setVelocity(actualAccel);
         move(MovementType.SELF, actualAccel);
+
+        getPassengerList().forEach(e -> e.fallDistance = 0);
+    }
+
+    private void pickUpEntity() {
+        Entity e = getPrimaryPassenger();
+        if (e != null) {
+            e.stopRiding();
+        } else {
+            world.getEntities(this, getBoundingBox().offset(0.0, -1, 0.0).expand(0.2, 1.0, 0.2)).stream().findFirst().ifPresent(e1 -> {
+                e1.startRiding(this);
+            });
+        }
+    }
+
+    @Override
+    public Entity getPrimaryPassenger() {
+        return this.getPassengerList().isEmpty() ? null : this.getPassengerList().get(0);
+    }
+
+    @Override
+    public void updatePassengerPosition(Entity passenger, PositionUpdater positionUpdater) {
+        if (this.hasPassenger(passenger)) {
+            positionUpdater.accept(passenger, this.getX(), this.getY() - passenger.getHeight() + getHeightOffset(passenger.getType()), this.getZ());
+        }
+    }
+
+    private double getHeightOffset(EntityType<?> entity) {
+        if (entity == EntityType.PLAYER) return -0.2;
+        else if (entity == EntityType.ITEM) return -0.5;
+        else return 0.0;
     }
 
     private void updateEulerRotation(Quaternion rotation) {
