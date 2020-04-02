@@ -99,4 +99,14 @@ public final class MathUtil {
         return q1;
     }
 
+    public static Vec3d project(Vec3d self, Vec3d ref) {
+        Vec3d v = ref.normalize();
+        double len = self.dotProduct(v);
+        return v.multiply(len);
+    }
+
+    public static Vec3d reject(Vec3d self, Vec3d ref) {
+        return self.subtract(project(self, ref));
+    }
+
 }

@@ -87,7 +87,7 @@ public class DroneEntityModel extends CompositeEntityModel<DroneEntity> {
         body.yaw = ang.getYaw();
         body.pitch = ang.getPitch();
         body.roll = ang.getRoll();
-        float rotation = System.nanoTime() / 100f % 360;
+        float rotation = System.nanoTime() % 36000 / 100f;
         float toRadians = (float) (Math.PI / 180);
         rotor1.yaw = rotation * toRadians;
         rotor2.yaw = (-rotation + 90) * toRadians;

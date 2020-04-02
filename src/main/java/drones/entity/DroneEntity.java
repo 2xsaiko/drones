@@ -49,7 +49,8 @@ public class DroneEntity extends Entity {
     private static final TrackedData<RcInputState> INPUTS = DataTracker.registerData(DroneEntity.class, TrackedDataHandlers.RC_INPUT_STATE);
     private static final TrackedData<Optional<UUID>> LINK_ID = DataTracker.registerData(DroneEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
 
-    private static final Vec3d UP = new Vec3d(0, 1, 0);
+    private static final Vec3d GRAVITY = new Vec3d(0, -0.2, 0);
+    public static final Vec3d UP = GRAVITY.negate().normalize();
 
     private static final Set<WeakReference<DroneEntity>> INSTANCES = new HashSet<>();
 
@@ -75,6 +76,8 @@ public class DroneEntity extends Entity {
             inputs = getInputs();
         }
 
+        // react to inputs
+
         Quaternion rotation = getRotation().copy();
         float x = -inputs.getZTilt();
         float y = -inputs.getYTurn();
@@ -84,20 +87,40 @@ public class DroneEntity extends Entity {
             x /= l;
             y /= l;
             z /= l;
-            rotation.hamiltonProduct(new Quaternion(new Vector3f(x, y, z), 0.2f, false));
+            rotation.hamiltonProduct(new Quaternion(new Vector3f(x, y, z), 0.075f, false));
             rotation.normalize();
         }
 
-        MathUtil.rotateTowards(rotation, UP, 0.2f, null, null);
-        setRotation(rotation);
+        // try rotating towards normal orientation again
 
+        // FIXME quaternions can go fucking die
+        // MathUtil.rotateTowards(rotation, UP.add(MathUtil.reject(getVelocity().negate(), UP)).normalize(), 0.1f, null, null);
+        MathUtil.rotateTowards(rotation, UP, (float) Math.max(0.1, -MathUtil.rotate(UP, rotation).dotProduct(UP)), null, null);
+        setRotation(rotation);
+        updateEulerRotation(rotation);
+
+        // calculate total new acceleration without taking air resistance into account
+
+        Vec3d up = MathUtil.rotate(UP, rotation);
+        Vec3d upAccel = up.multiply(-GRAVITY.y + 0.5 * inputs.getSpeed());
+        Vec3d totalAccel = GRAVITY.add(upAccel);
+
+        // calculate current actual acceleration
+
+        float airResistanceDown = 0.4f;
+        float airResistanceSide = 0.9f;
+        Vec3d unadjustedAccel = getVelocity().add(totalAccel);
+        Vec3d actualAccel = MathUtil.project(unadjustedAccel, up).multiply(airResistanceDown)
+            .add(MathUtil.reject(unadjustedAccel, up).multiply(airResistanceSide));
+
+        setVelocity(actualAccel);
+        move(MovementType.SELF, actualAccel);
+    }
+
+    private void updateEulerRotation(Quaternion rotation) {
         EulerAngle eulerAngle = MathUtil.toEulerAngles(rotation);
         yaw = eulerAngle.getYaw() * MathUtil.toDegreesf;
         pitch = eulerAngle.getPitch() * MathUtil.toDegreesf;
-
-        Vec3d up = MathUtil.rotate(UP, rotation);
-        Vec3d g = new Vec3d(0, -0.1, 0);
-        move(MovementType.SELF, g.add(MathUtil.rotate(g.negate(), rotation)).add(up.multiply(0.2 * inputs.getSpeed())));
     }
 
     @Override

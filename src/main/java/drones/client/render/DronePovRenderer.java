@@ -44,6 +44,10 @@ public class DronePovRenderer {
         if (linkId == null) return null;
         for (Iterator<DroneEntity> iter = DroneEntity.getInstances(); iter.hasNext(); ) {
             DroneEntity next = iter.next();
+            if (!next.isAlive()) {
+                iter.remove();
+                continue;
+            }
             if (next.world == mc.player.world && linkId.equals(next.getLinkId())) return next;
         }
         return null;

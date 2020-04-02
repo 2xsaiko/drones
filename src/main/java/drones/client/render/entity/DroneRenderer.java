@@ -33,8 +33,8 @@ public class DroneRenderer extends EntityRenderer<DroneEntity> {
         this.model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
         matrices.pop();
 
-//        VertexConsumer buffer = vertexConsumers.getBuffer(RenderLayer.getLines());
-//        MathUtil.rotateTowards(entity.getRotation().copy(), new Vec3d(0, 1, 0), 0.2f, matrices.peek().getModel(), buffer);
+        // VertexConsumer buffer = vertexConsumers.getBuffer(RenderLayer.getLines());
+        // MathUtil.rotateTowards(entity.getRotation(), DroneEntity.UP.add(MathUtil.reject(entity.getVelocity().negate(), DroneEntity.UP)).normalize(), 0.1f, matrices.peek().getModel(), buffer);
     }
 
     @Override
