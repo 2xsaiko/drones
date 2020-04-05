@@ -4,9 +4,13 @@
   "version": "${version}",
   "name": "Drones",
   "description": "",
+  "authors": ["2xsaiko"],
+  "contact": {
+    "sources": "https://git.dblsaiko.net/drones.git/"
+  },
+  "license": "MIT",
   "icon": "assets/drones/icon.png",
   "environment": "*",
-  "license": "MIT",
   "entrypoints": {
     "main": ["drones.Main"],
     "client": ["drones.client.Main"]
