@@ -3,7 +3,6 @@ package drones.client.render.entity.model;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.CompositeEntityModel;
-import net.minecraft.util.math.EulerAngle;
 
 import java.util.Collections;
 
@@ -83,11 +82,15 @@ public class DroneEntityModel extends CompositeEntityModel<DroneEntity> {
 
     @Override
     public void setAngles(DroneEntity entity, float limbAngle, float limbDistance, float customAngle, float headYaw, float headPitch) {
-        EulerAngle ang = new EulerAngle(0, 0, 0);//MathUtil.toEulerAngles(entity.getRotation());
-        body.yaw = ang.getYaw();
-        body.pitch = ang.getPitch();
-        body.roll = ang.getRoll();
+        // EulerAngle ang = new EulerAngle(0, 0, 0);//MathUtil.toEulerAngles(entity.getRotation());
+        // body.yaw = ang.getYaw();
+        // body.pitch = ang.getPitch();
+        // body.roll = ang.getRoll();
         float rotation = System.nanoTime() % 36000 / 100f;
+        setRotorAngles(rotation);
+    }
+
+    public void setRotorAngles(float rotation) {
         float toRadians = (float) (Math.PI / 180);
         rotor1.yaw = rotation * toRadians;
         rotor2.yaw = (-rotation + 90) * toRadians;

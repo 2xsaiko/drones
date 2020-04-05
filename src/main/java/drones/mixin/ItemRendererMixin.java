@@ -7,7 +7,8 @@ import net.minecraft.client.render.model.json.ModelTransformation.Mode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 
-import drones.client.render.item.RemoteControlRenderer;
+import drones.client.render.item.DroneItemRenderer;
+import drones.client.render.item.RemoteControlItemRenderer;
 import drones.init.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +25,9 @@ public class ItemRendererMixin {
     )
     private void renderItem(ItemStack stack, Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
         if (stack.getItem() == Items.REMOTE_CONTROL) {
-            RemoteControlRenderer.INSTANCE.render(stack, renderMode, leftHanded, matrices, vertexConsumers, light, overlay, model);
+            RemoteControlItemRenderer.INSTANCE.render(matrices, vertexConsumers, overlay);
+        } else if (stack.getItem() == Items.DRONE) {
+            DroneItemRenderer.INSTANCE.render(matrices, vertexConsumers, light, overlay);
         }
     }
 

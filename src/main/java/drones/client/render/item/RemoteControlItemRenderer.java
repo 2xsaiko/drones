@@ -3,23 +3,20 @@ package drones.client.render.item;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.json.ModelTransformation.Mode;
 import net.minecraft.client.util.math.Matrix3f;
 import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.MatrixStack.Entry;
-import net.minecraft.item.ItemStack;
 
 import drones.client.texture.DronePovTexture;
 
-public class RemoteControlRenderer {
+public class RemoteControlItemRenderer {
 
-    public static final RemoteControlRenderer INSTANCE = new RemoteControlRenderer();
+    public static final RemoteControlItemRenderer INSTANCE = new RemoteControlItemRenderer();
 
-    private RemoteControlRenderer() {}
+    private RemoteControlItemRenderer() {}
 
-    public void render(ItemStack stack, Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model) {
+    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int overlay) {
         VertexConsumer buffer = vertexConsumers.getBuffer(RenderLayer.getEntitySolid(DronePovTexture.ID));
         Entry tos = matrices.peek();
         Matrix3f normal = tos.getNormal();

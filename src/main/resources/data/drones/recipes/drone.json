@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ImI",
+    " m ",
+    "ImI"
+  ],
+  "key": {
+    "I": { "item": "minecraft:iron_bars" },
+    "m": { "item": "minecraft:iron_ingot" }
+  },
+  "result": {
+    "item": "drones:drone",
+    "count": 1
+  }
+}

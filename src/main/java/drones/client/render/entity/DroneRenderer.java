@@ -13,7 +13,7 @@ import drones.client.render.entity.model.DroneEntityModel;
 import drones.entity.DroneEntity;
 
 public class DroneRenderer extends EntityRenderer<DroneEntity> {
-    private static final Identifier TEXTURE = new Identifier(Main.MODID, "textures/entity/drone.png");
+    public static final Identifier TEXTURE = new Identifier(Main.MODID, "textures/entity/drone.png");
 
     private final DroneEntityModel model;
 

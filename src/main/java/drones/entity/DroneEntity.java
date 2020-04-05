@@ -74,12 +74,14 @@ public class DroneEntity extends Entity {
             inputs = recv == null ? RcInputState.ofDefault() : recv.inputs();
             setInputs(inputs);
 
-            RcAction next;
-            while ((next = recv.nextAction()) != null) {
-                switch (next) {
-                    case PICK_UP:
-                        pickUpEntity();
-                        break;
+            if (recv != null) {
+                RcAction next;
+                while ((next = recv.nextAction()) != null) {
+                    switch (next) {
+                        case PICK_UP:
+                            pickUpEntity();
+                            break;
+                    }
                 }
             }
         } else {
@@ -122,6 +124,8 @@ public class DroneEntity extends Entity {
         Vec3d unadjustedAccel = getVelocity().add(totalAccel);
         Vec3d actualAccel = MathUtil.project(unadjustedAccel, up).multiply(airResistanceDown)
             .add(MathUtil.reject(unadjustedAccel, up).multiply(airResistanceSide));
+
+        // actually move the entity!
 
         setVelocity(actualAccel);
         move(MovementType.SELF, actualAccel);

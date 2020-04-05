@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I  ",
+    "mmm",
+    "omo"
+  ],
+  "key": {
+    "I": { "item": "minecraft:iron_bars" },
+    "m": { "item": "minecraft:iron_ingot" },
+    "o": { "item": "minecraft:stone_button" }
+  },
+  "result": {
+    "item": "drones:remote_control",
+    "count": 1
+  }
+}
