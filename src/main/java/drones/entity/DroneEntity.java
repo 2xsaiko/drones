@@ -51,7 +51,7 @@ public class DroneEntity extends Entity {
     private static final TrackedData<Optional<UUID>> LINK_ID = DataTracker.registerData(DroneEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
 
     private static final Vec3d GRAVITY = new Vec3d(0, -0.2, 0);
-    public static final Vec3d UP = GRAVITY.negate().normalize();
+    public static final Vec3d UP = GRAVITY.multiply(-1.0).normalize();
 
     private static final Set<WeakReference<DroneEntity>> INSTANCES = new HashSet<>();
 
@@ -90,7 +90,7 @@ public class DroneEntity extends Entity {
 
         // react to inputs
 
-        Quaternion rotation = getRotation().copy();
+        Quaternion rotation = MathUtil.copy(getRotation());
         float x = -inputs.getZTilt();
         float y = -inputs.getYTurn();
         float z = -inputs.getXTilt();
@@ -100,7 +100,7 @@ public class DroneEntity extends Entity {
             y /= l;
             z /= l;
             rotation.hamiltonProduct(new Quaternion(new Vector3f(x, y, z), 0.075f, false));
-            rotation.normalize();
+            MathUtil.normalize(rotation);
         }
 
         // try rotating towards normal orientation again
@@ -266,7 +266,7 @@ public class DroneEntity extends Entity {
 
     @Override
     protected void initDataTracker() {
-        getDataTracker().startTracking(ROTATION, Quaternion.IDENTITY.copy());
+        getDataTracker().startTracking(ROTATION, MathUtil.copy(Quaternion.IDENTITY));
         getDataTracker().startTracking(INPUTS, RcInputState.ofDefault());
         getDataTracker().startTracking(LINK_ID, Optional.empty());
     }

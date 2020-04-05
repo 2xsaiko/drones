@@ -4,6 +4,7 @@
   "package": "drones.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "QuaternionMixin"
   ],
   "client": [
     "ClientPlayerEntityMixin",

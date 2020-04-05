@@ -9,10 +9,10 @@ import net.minecraft.item.ItemStack;
 import java.util.Iterator;
 import java.util.UUID;
 
-import drones.client.ext.GameRendererExt;
-import drones.client.ext.MinecraftClientExt;
 import drones.client.texture.DronePovTexture;
 import drones.entity.DroneEntity;
+import drones.ext.GameRendererExt;
+import drones.ext.MinecraftClientExt;
 import drones.init.Items;
 import drones.item.RemoteControlItem;
 

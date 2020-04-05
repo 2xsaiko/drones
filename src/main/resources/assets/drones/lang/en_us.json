@@ -3,5 +3,15 @@
   "item.drones.remote_control": "Remote Control",
   "itemGroup.drones.all": "Drones",
   "status.drones.drone_linked": "Linked!",
-  "tooltip.drones.rc_target": "Linked to: %s"
+  "tooltip.drones.rc_target": "Linked to: %s",
+  "drones.drone_controls": "Drone Controls",
+  "key.drones.drone_accel": "Accelerate",
+  "key.drones.drone_decel": "Decelerate",
+  "key.drones.drone_pick_up": "Pick Up Entity",
+  "key.drones.drone_tilt_backward": "Tilt Backwards",
+  "key.drones.drone_tilt_forward": "Tilt Forwards",
+  "key.drones.drone_tilt_left": "Tilt Left",
+  "key.drones.drone_tilt_right": "Tilt Right",
+  "key.drones.drone_turn_left": "Turn Left",
+  "key.drones.drone_turn_right": "Turn Right"
 }

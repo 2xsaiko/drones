@@ -5,6 +5,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.Quaternion;
 
+import drones.util.MathUtil;
 import drones.util.RcInputState;
 
 public final class TrackedDataHandlers {
@@ -31,7 +32,7 @@ public final class TrackedDataHandlers {
 
         @Override
         public Quaternion copy(Quaternion q) {
-            return q.copy();
+            return MathUtil.copy(q);
         }
     };
 

@@ -9,9 +9,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import drones.client.ext.GameRendererExt;
 import drones.client.render.DronePovRenderer;
 import drones.entity.DroneEntity;
+import drones.ext.GameRendererExt;
 import drones.util.MathUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -109,7 +109,7 @@ public class GameRendererMixin implements GameRendererExt {
         if (getDronePov() == null) return;
 
         matrix.translate(0.0, -0.2, 0.0);
-        Quaternion rotation = getDronePov().getRotation().copy();
+        Quaternion rotation = MathUtil.copy(getDronePov().getRotation());
         MathUtil.invert(rotation);
         matrix.multiply(rotation);
     }

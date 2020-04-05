@@ -5,8 +5,8 @@ import net.minecraft.client.RunArgs;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.texture.TextureManager;
 
-import drones.client.ext.MinecraftClientExt;
 import drones.client.texture.DronePovTexture;
+import drones.ext.MinecraftClientExt;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;

@@ -1,4 +1,4 @@
-package drones.client.ext;
+package drones.ext;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
