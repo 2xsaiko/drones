@@ -12,8 +12,8 @@
   "icon": "assets/drones/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": ["drones.Main"],
-    "client": ["drones.client.Main"]
+    "main": ["net.dblsaiko.drones.Main"],
+    "client": ["net.dblsaiko.drones.client.Main"]
   },
   "mixins": [
     "drones.mixins.json"
