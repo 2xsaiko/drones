@@ -2,7 +2,7 @@ package net.dblsaiko.drones.entity.data;
 
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.util.PacketByteBuf;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Quaternion;
 
 import net.dblsaiko.drones.util.MathUtil;
@@ -15,19 +15,19 @@ public final class TrackedDataHandlers {
     public static final TrackedDataHandler<Quaternion> QUATERNION = new TrackedDataHandler<Quaternion>() {
         @Override
         public void write(PacketByteBuf data, Quaternion q) {
-            data.writeFloat(q.getA());
-            data.writeFloat(q.getB());
-            data.writeFloat(q.getC());
-            data.writeFloat(q.getD());
+            data.writeFloat(q.getW());
+            data.writeFloat(q.getX());
+            data.writeFloat(q.getY());
+            data.writeFloat(q.getZ());
         }
 
         @Override
         public Quaternion read(PacketByteBuf buffer) {
-            float a = buffer.readFloat();
-            float b = buffer.readFloat();
-            float c = buffer.readFloat();
-            float d = buffer.readFloat();
-            return new Quaternion(b, c, d, a);
+            float w = buffer.readFloat();
+            float x = buffer.readFloat();
+            float y = buffer.readFloat();
+            float z = buffer.readFloat();
+            return new Quaternion(x, y, z, w);
         }
 
         @Override

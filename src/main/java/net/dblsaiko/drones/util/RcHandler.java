@@ -28,7 +28,8 @@ public class RcHandler {
 
     private final Map<UUID, RcChannel> channels = new HashMap<>();
 
-    private RcHandler(ServerWorld world) { }
+    private RcHandler(ServerWorld world) {
+    }
 
     public RcSender sender(UUID uuid, ServerPlayerEntity self) {
         RcChannel chan = channels.computeIfAbsent(uuid, RcChannel::new);

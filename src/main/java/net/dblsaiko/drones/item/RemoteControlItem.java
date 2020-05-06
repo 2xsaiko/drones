@@ -29,17 +29,17 @@ public class RemoteControlItem extends Item {
     public static UUID getLinkId(ItemStack stack) {
         CompoundTag tag = stack.getTag();
         if (tag == null) return null;
-        return !tag.containsUuid("LinkId") ? null : tag.getUuid("LinkId");
+        return !tag.containsUuidNew("LinkId") ? null : tag.getUuidNew("LinkId");
     }
 
     public static UUID getOrCreateLinkId(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.containsUuid("LinkId")) {
+        if (!tag.containsUuidNew("LinkId")) {
             UUID id = UUID.randomUUID();
-            tag.putUuid("LinkId", id);
+            tag.putUuidNew("LinkId", id);
             return id;
         } else {
-            return tag.getUuid("LinkId");
+            return tag.getUuidNew("LinkId");
         }
     }
 

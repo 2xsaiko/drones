@@ -4,7 +4,7 @@ import net.minecraft.util.math.Quaternion;
 
 public interface QuaternionExt {
 
-    void set0(float a, float b, float c, float d);
+    void set0(float x, float y, float z, float w);
 
     @SuppressWarnings("ConstantConditions")
     static QuaternionExt from(Quaternion self) {

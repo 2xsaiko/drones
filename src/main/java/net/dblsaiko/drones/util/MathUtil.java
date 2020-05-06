@@ -1,10 +1,10 @@
 package net.dblsaiko.drones.util;
 
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.math.EulerAngle;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 
@@ -18,10 +18,10 @@ public final class MathUtil {
     public static final float toDegreesf = (float) toDegrees;
 
     public static EulerAngle toEulerAngles(Quaternion q) {
-        float w = q.getA();
-        float x = q.getB();
-        float y = q.getC();
-        float z = q.getD();
+        float w = q.getW();
+        float x = q.getX();
+        float y = q.getY();
+        float z = q.getZ();
         float roll, yaw, pitch;
 
         // roll (x-axis rotation)
@@ -46,10 +46,10 @@ public final class MathUtil {
 
     public static Vec3d rotate(Vec3d self, Quaternion q) {
         // Extract the vector part of the quaternion
-        Vec3d u = new Vec3d(q.getB(), q.getC(), q.getD());
+        Vec3d u = new Vec3d(q.getX(), q.getY(), q.getZ());
 
         // Extract the scalar part of the quaternion
-        float s = q.getA();
+        float s = q.getW();
 
         // Do the math
         return u.multiply(2.0f * u.dotProduct(self))
@@ -61,18 +61,17 @@ public final class MathUtil {
         Quaternion q = copy(Quaternion.IDENTITY);
         Vec3d cross = from.crossProduct(to);
         float w = (float) (Math.sqrt(from.lengthSquared() * to.lengthSquared()) + from.dotProduct(to));
-        set(q, w, (float) cross.x, (float) cross.y, (float) cross.z);
+        set(q, (float) cross.x, (float) cross.y, (float) cross.z, w);
         q.normalize();
         return q;
     }
 
-    // TODO make not client only
-    public static void set(Quaternion self, float a, float b, float c, float d) {
-        QuaternionExt.from(self).set0(a, b, c, d);
+    public static void set(Quaternion self, float x, float y, float z, float w) {
+        QuaternionExt.from(self).set0(x, y, z, w);
     }
 
     public static void set(Quaternion self, Quaternion other) {
-        set(self, other.getA(), other.getB(), other.getC(), other.getD());
+        set(self, other.getX(), other.getY(), other.getZ(), other.getW());
     }
 
     public static void rotateTowards(Quaternion self, Vec3d orientation, float speed, Matrix4f mat, VertexConsumer debugConsumer) {
@@ -97,8 +96,8 @@ public final class MathUtil {
     }
 
     public static void invert(Quaternion self) {
-        float l = self.getA() * self.getA() + self.getB() * self.getB() + self.getC() * self.getC() + self.getD() * self.getD();
-        set(self, self.getA() / l, -self.getB() / l, -self.getC() / l, -self.getD() / l);
+        float l = self.getW() * self.getW() + self.getX() * self.getX() + self.getY() * self.getY() + self.getZ() * self.getZ();
+        set(self, -self.getX() / l, -self.getY() / l, -self.getZ() / l, self.getW() / l);
     }
 
     public static Quaternion invertCopy(Quaternion q) {
@@ -122,11 +121,11 @@ public final class MathUtil {
     }
 
     public static void scale(Quaternion self, float factor) {
-        set(self, self.getA() * factor, self.getB() * factor, self.getC() * factor, self.getD() * factor);
+        set(self, self.getX() * factor, self.getY() * factor, self.getZ() * factor, self.getW() * factor);
     }
 
     public static void normalize(Quaternion self) {
-        float f = self.getB() * self.getB() + self.getC() * self.getC() + self.getD() * self.getD() + self.getA() * self.getA();
+        float f = self.getX() * self.getX() + self.getY() * self.getY() + self.getZ() * self.getZ() + self.getW() * self.getW();
         if (f > 1.0E-6F) {
             float g = (float) MathHelper.fastInverseSqrt((double) f);
             scale(self, g);

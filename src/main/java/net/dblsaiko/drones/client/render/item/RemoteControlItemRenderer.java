@@ -3,10 +3,10 @@ package net.dblsaiko.drones.client.render.item;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.Matrix3f;
-import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.MatrixStack.Entry;
+import net.minecraft.util.math.Matrix3f;
+import net.minecraft.util.math.Matrix4f;
 
 import net.dblsaiko.drones.client.texture.DronePovTexture;
 
@@ -14,7 +14,8 @@ public class RemoteControlItemRenderer {
 
     public static final RemoteControlItemRenderer INSTANCE = new RemoteControlItemRenderer();
 
-    private RemoteControlItemRenderer() {}
+    private RemoteControlItemRenderer() {
+    }
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int overlay) {
         VertexConsumer buffer = vertexConsumers.getBuffer(RenderLayer.getEntitySolid(DronePovTexture.ID));

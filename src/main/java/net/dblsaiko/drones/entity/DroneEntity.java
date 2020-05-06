@@ -182,7 +182,7 @@ public class DroneEntity extends Entity {
         ItemStack stack = player.getStackInHand(hand);
         if (stack.getItem() == Items.REMOTE_CONTROL) {
             setLinkId(RemoteControlItem.getOrCreateLinkId(stack));
-            player.addChatMessage(new TranslatableText(String.format("status.%s.drone_linked", Main.MODID)), true);
+            player.sendMessage(new TranslatableText(String.format("status.%s.drone_linked", Main.MODID)), true);
             interactionCooldown = 5;
             return ActionResult.SUCCESS;
         } else if (stack.isEmpty()) {

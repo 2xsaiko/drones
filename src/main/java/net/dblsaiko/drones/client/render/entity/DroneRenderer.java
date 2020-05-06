@@ -20,7 +20,7 @@ public class DroneRenderer extends EntityRenderer<DroneEntity> {
     public DroneRenderer(EntityRenderDispatcher dispatcher) {
         super(dispatcher);
         model = new DroneEntityModel();
-        shadowSize = 0.375f;
+        shadowRadius = 0.375f;
     }
 
     @Override

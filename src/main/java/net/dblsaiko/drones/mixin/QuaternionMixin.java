@@ -10,17 +10,17 @@ import net.dblsaiko.drones.ext.QuaternionExt;
 @Mixin(Quaternion.class)
 public class QuaternionMixin implements QuaternionExt {
 
-    @Shadow private float a;
-    @Shadow private float b;
-    @Shadow private float c;
-    @Shadow private float d;
+    @Shadow private float x;
+    @Shadow private float y;
+    @Shadow private float z;
+    @Shadow private float w;
 
     @Override
-    public void set0(float a, float b, float c, float d) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
+    public void set0(float x, float y, float z, float w) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
     }
 
 }

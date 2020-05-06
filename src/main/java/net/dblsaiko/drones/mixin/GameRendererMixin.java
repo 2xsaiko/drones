@@ -3,9 +3,9 @@ package net.dblsaiko.drones.mixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Quaternion;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -60,7 +60,7 @@ public class GameRendererMixin implements GameRendererExt {
         return camera;
     }
 
-    @Inject(method = "method_22973(Lnet/minecraft/client/render/Camera;FZ)Lnet/minecraft/client/util/math/Matrix4f;", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getBasicProjectionMatrix(Lnet/minecraft/client/render/Camera;FZ)Lnet/minecraft/util/math/Matrix4f;", at = @At("HEAD"), cancellable = true)
     private void getProjectionMatrix(Camera camera, float f, boolean bl, CallbackInfoReturnable<Matrix4f> cir) {
         if (getDronePov() == null) return;
 
@@ -101,9 +101,9 @@ public class GameRendererMixin implements GameRendererExt {
     @Inject(
         method = "renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V",
         at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/render/WorldRenderer;render(Lnet/minecraft/client/util/math/MatrixStack;FJZLnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/GameRenderer;Lnet/minecraft/client/render/LightmapTextureManager;Lnet/minecraft/client/util/math/Matrix4f;)V",
-            shift = Shift.BEFORE
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/render/WorldRenderer;render(Lnet/minecraft/client/util/math/MatrixStack;FJZLnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/GameRenderer;Lnet/minecraft/client/render/LightmapTextureManager;Lnet/minecraft/util/math/Matrix4f;)V",
+                shift = Shift.BEFORE
         )
     )
     private void applyRotation(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
