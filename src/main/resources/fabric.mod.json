@@ -6,7 +6,7 @@
   "description": "",
   "authors": ["2xsaiko"],
   "contact": {
-    "sources": "https://git.dblsaiko.net/drones.git/"
+    "sources": "https://github.com/2xsaiko/drones"
   },
   "license": "MIT",
   "icon": "assets/drones/icon.png",
@@ -21,7 +21,7 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": ">=1.16-alpha.20.18.a"
+    "minecraft": ">=1.16-alpha.20.19.a"
   },
   "suggests": {
     "flamingo": "*"
