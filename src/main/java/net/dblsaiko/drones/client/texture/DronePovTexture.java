@@ -26,7 +26,7 @@ public class DronePovTexture extends AbstractTexture {
         RenderSystem.assertThread(RenderSystem::isOnRenderThreadOrInit);
         if (fb == null) {
             fb = new Framebuffer(256, 256, true, MinecraftClient.IS_SYSTEM_MAC);
-            this.glId = fb.colorAttachment; // just in case
+            this.glId = fb.getColorAttachment(); // just in case
         }
 
         return fb;
@@ -34,7 +34,7 @@ public class DronePovTexture extends AbstractTexture {
 
     @Override
     public int getGlId() {
-        return getFramebuffer().colorAttachment;
+        return getFramebuffer().getColorAttachment();
     }
 
     @Override

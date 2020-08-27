@@ -138,7 +138,7 @@ public class DroneEntity extends Entity {
         if (e != null) {
             e.stopRiding();
         } else {
-            world.getEntities(this, getBoundingBox().offset(0.0, -1, 0.0).expand(0.2, 1.0, 0.2)).stream().findFirst().ifPresent(e1 -> {
+            world.getOtherEntities(this, getBoundingBox().offset(0.0, -1, 0.0).expand(0.2, 1.0, 0.2)).stream().findFirst().ifPresent(e1 -> {
                 e1.startRiding(this);
             });
         }
@@ -150,9 +150,9 @@ public class DroneEntity extends Entity {
     }
 
     @Override
-    public void updatePassengerPosition(Entity passenger, PositionUpdater positionUpdater) {
+    public void updatePassengerPosition(Entity passenger) {
         if (this.hasPassenger(passenger)) {
-            positionUpdater.accept(passenger, this.getX(), this.getY() - passenger.getHeight() + getHeightOffset(passenger.getType()), this.getZ());
+            passenger.updatePosition(this.getX(), this.getY() - passenger.getHeight() + getHeightOffset(passenger.getType()), this.getZ());
         }
     }
 

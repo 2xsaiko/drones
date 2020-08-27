@@ -25,7 +25,7 @@ public class DroneSettings {
 
     public CompoundTag toTag(CompoundTag tag) {
         if (linkId != null) {
-            tag.putUuidNew("LinkId", linkId);
+            tag.putUuid("LinkId", linkId);
         } else {
             tag.remove("LinkId");
         }
@@ -55,8 +55,8 @@ public class DroneSettings {
 
     public static DroneSettings fromTag(CompoundTag tag) {
         UUID linkId = null;
-        if (tag.containsUuidNew("LinkId")) {
-            linkId = tag.getUuidNew("LinkId");
+        if (tag.containsUuid("LinkId")) {
+            linkId = tag.getUuid("LinkId");
         }
         return DroneSettings.of(linkId);
     }

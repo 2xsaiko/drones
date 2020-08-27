@@ -2,6 +2,7 @@ package net.dblsaiko.drones.client.render;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.options.Perspective;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -60,9 +61,9 @@ public class DronePovRenderer {
 
         boolean oldHudHidden = mc.options.hudHidden;
         Entity oldCam = mc.cameraEntity;
-        int oldPerspective = mc.options.perspective;
+        Perspective oldPerspective = mc.options.getPerspective();
         mc.options.hudHidden = true;
-        mc.options.perspective = 0;
+        mc.options.method_31043(Perspective.FIRST_PERSON);
         Framebuffer window = mc.getFramebuffer();
         Framebuffer dronePovTexture = DronePovTexture.getInstance().getFramebuffer();
         dronePovTexture.beginWrite(true);
@@ -95,6 +96,7 @@ public class DronePovRenderer {
 
         mc.cameraEntity = oldCam;
         mc.options.hudHidden = oldHudHidden;
-        mc.options.perspective = oldPerspective;
+        mc.options.method_31043(oldPerspective);
     }
+
 }
